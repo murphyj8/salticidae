@@ -20,16 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.17)
 project(Salticidae)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)## Always include the current directory
 
 find_package(Libuv 1.10.0 REQUIRED)
 find_package(OpenSSL 1.1.0 REQUIRED)
 
-include_directories(include)
+include_directories(include ${CMAKE_CURRENT_BINARY_DIR}/include ${LIBUV_INCLUDE_DIR})
 add_library(salticidae
     OBJECT
     src/type.cpp
@@ -42,20 +45,24 @@ add_library(salticidae
     src/conn.cpp
     src/network.cpp)
 
-option(BUILD_SHARED "build shared library." OFF)
+option(BUILD_SHARED "build shared library." ON)
 if(BUILD_SHARED)
     set_property(TARGET salticidae PROPERTY POSITION_INDEPENDENT_CODE 1)
     add_library(salticidae_shared SHARED $<TARGET_OBJECTS:salticidae>)
     set_target_properties(salticidae_shared PROPERTIES OUTPUT_NAME "salticidae")
+    target_link_directories(salticidae_shared PUBLIC "/usr/local/lib")
     target_link_libraries(salticidae_shared uv crypto ssl pthread)
     install(TARGETS salticidae_shared DESTINATION lib)
 endif()
+
 add_library(salticidae_static STATIC $<TARGET_OBJECTS:salticidae>)
 set_target_properties(salticidae_static PROPERTIES OUTPUT_NAME "salticidae")
+#target_include_directories(salticidae_static PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include)
+#target_include_directories(salticidae_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(salticidae_static uv crypto ssl pthread)
 install(TARGETS salticidae_static DESTINATION lib)
 
-option(BUILD_TEST "build test binaries." OFF)
+option(BUILD_TEST "build test binaries." ON)
 if(BUILD_TEST)
     add_subdirectory(test)
 endif()

@@ -820,7 +820,7 @@ using mpscqueue_t = salticidae::MPSCQueueEventDriven<void *>;
 #else
 
 #include <stdbool.h>
-#include "config.h"
+#include "salticidae/config.h"
 
 #ifdef SALTICIDAE_CBINDINGS
 typedef struct eventcontext_t eventcontext_t;

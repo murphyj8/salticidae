@@ -486,7 +486,7 @@ using datastream_t = salticidae::DataStream;
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "config.h"
+#include "salticidae/config.h"
 #include "type.h"
 
 #ifdef SALTICIDAE_CBINDINGS

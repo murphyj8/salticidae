@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
-
+#include "salticidae/endian.h"
 #include "salticidae/event.h"
 #include "salticidae/network.h"
 #include "salticidae/stream.h"

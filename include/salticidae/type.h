@@ -25,7 +25,7 @@
 #ifndef _SALTICIDAE_TYPE_H
 #define _SALTICIDAE_TYPE_H
 
-#include "config.h"
+#include "salticidae/config.h"
 
 #ifdef __cplusplus
 #include <vector>
